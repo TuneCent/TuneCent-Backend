@@ -1,0 +1,1356 @@
+{
+	"info": {
+		"_postman_id": "tunecent-complete-full-2025",
+		"name": "TuneCent API - Complete with All Responses (68 Endpoints)",
+		"description": "Complete TuneCent Backend API Collection with SAVED RESPONSES for every endpoint\n\n**Total Endpoints:** 68\n**All endpoints have example responses!**\n\n**Environment Variables:**\n- `base_url`: http://localhost:8080 OR https://tunecent.fabian.web.id\n- Endpoints already include /api/v1 path",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "deployed_url",
+			"value": "https://tunecent.fabian.web.id",
+			"type": "string"
+		},
+		{
+			"key": "test_address",
+			"value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+			"type": "string"
+		},
+		{
+			"key": "test_token_id",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "test_campaign_id",
+			"value": "1",
+			"type": "string"
+		}
+	],
+	"item": [
+		{
+			"name": "0. Health (1)",
+			"item": [
+				{
+					"name": "Health Check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/health"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"status\": \"ok\",\n  \"service\": \"TuneCent Backend API\",\n  \"version\": \"1.0.0-poc\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "1. Music (4)",
+			"item": [
+				{
+					"name": "Register Music",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{"key": "creator_address", "value": "{{test_address}}", "type": "text"},
+								{"key": "title", "value": "Midnight Dreams", "type": "text"},
+								{"key": "artist", "value": "DJ Cool", "type": "text"},
+								{"key": "genre", "value": "Electronic", "type": "text"},
+								{"key": "description", "value": "An ambient electronic track", "type": "text"},
+								{"key": "duration", "value": "240", "type": "text"},
+								{"key": "audio_file", "type": "file", "src": []}
+							]
+						},
+						"url": "{{base_url}}/api/v1/music/register"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Music registered successfully\",\n  \"token_id\": 1,\n  \"metadata\": {\n    \"id\": 1,\n    \"token_id\": 1,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n    \"title\": \"Midnight Dreams\",\n    \"artist\": \"DJ Cool\",\n    \"genre\": \"Electronic\",\n    \"description\": \"An ambient electronic track\",\n    \"ipfs_cid\": \"QmXYZ123...\",\n    \"fingerprint_hash\": \"0xabcdef...\",\n    \"audio_file_url\": \"https://ipfs.io/ipfs/QmXYZ123...\",\n    \"duration\": 240,\n    \"is_active\": true,\n    \"registered_at\": \"2025-10-20T10:30:45Z\",\n    \"created_at\": \"2025-10-20T10:30:45Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Music by Token ID",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/music/{{test_token_id}}"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"id\": 1,\n  \"token_id\": 1,\n  \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"title\": \"Midnight Dreams\",\n  \"artist\": \"DJ Cool\",\n  \"genre\": \"Electronic\",\n  \"description\": \"An ambient electronic track\",\n  \"ipfs_cid\": \"QmXYZ123...\",\n  \"fingerprint_hash\": \"0xabcdef...\",\n  \"audio_file_url\": \"https://ipfs.io/ipfs/QmXYZ123...\",\n  \"cover_image_url\": \"https://ipfs.io/ipfs/QmCover...\",\n  \"duration\": 240,\n  \"is_active\": true,\n  \"play_count\": 5000,\n  \"view_count\": 15000,\n  \"listener_count\": 3500,\n  \"viral_score\": 75.5,\n  \"trending_rank\": 5,\n  \"registered_at\": \"2025-10-20T10:30:45Z\",\n  \"created_at\": \"2025-10-20T10:30:45Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List All Music",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/music?limit=20&offset=0",
+							"query": [
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"music\": [\n    {\n      \"id\": 1,\n      \"token_id\": 1,\n      \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"title\": \"Midnight Dreams\",\n      \"artist\": \"DJ Cool\",\n      \"genre\": \"Electronic\",\n      \"duration\": 240,\n      \"play_count\": 5000,\n      \"viral_score\": 75.5,\n      \"is_active\": true,\n      \"created_at\": \"2025-10-20T10:30:45Z\"\n    },\n    {\n      \"id\": 2,\n      \"token_id\": 2,\n      \"creator_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n      \"title\": \"Summer Vibes\",\n      \"artist\": \"Jane Beats\",\n      \"genre\": \"Pop\",\n      \"duration\": 210,\n      \"play_count\": 8000,\n      \"viral_score\": 82.3,\n      \"is_active\": true,\n      \"created_at\": \"2025-10-19T15:20:00Z\"\n    }\n  ],\n  \"total\": 2,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Music Analytics",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/music/{{test_token_id}}/analytics"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"title\": \"Midnight Dreams\",\n  \"total_views\": 15000,\n  \"total_plays\": 5000,\n  \"total_listeners\": 3500,\n  \"total_royalties\": \"2500000000000000000\",\n  \"spotify_plays\": 2000,\n  \"spotify_growth\": 25.5,\n  \"tiktok_views\": 8000,\n  \"tiktok_growth\": 150.2,\n  \"apple_music_plays\": 1500,\n  \"apple_music_growth\": 15.8,\n  \"viral_score\": 75.5,\n  \"estimated_reach\": 25000,\n  \"weekly_growth\": 45.3\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "2. Campaigns (4)",
+			"item": [
+				{
+					"name": "Create Campaign",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token_id\": 1,\n  \"creator_address\": \"{{test_address}}\",\n  \"goal_amount\": \"5000000000000000000\",\n  \"royalty_percentage\": 2000,\n  \"duration_days\": 30,\n  \"lockup_days\": 90\n}"
+						},
+						"url": "{{base_url}}/api/v1/campaigns"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Campaign created successfully\",\n  \"campaign\": {\n    \"id\": 1,\n    \"campaign_id\": 1,\n    \"token_id\": 1,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n    \"goal_amount\": \"5000000000000000000\",\n    \"raised_amount\": \"0\",\n    \"royalty_percentage\": 2000,\n    \"deadline\": \"2025-11-20T10:30:45Z\",\n    \"lockup_period\": 90,\n    \"status\": \"active\",\n    \"risk_score\": 50,\n    \"estimated_roi\": 150.0,\n    \"contributor_count\": 0,\n    \"created_at\": \"2025-10-20T10:30:45Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Campaign",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/campaigns/{{test_campaign_id}}"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"id\": 1,\n  \"campaign_id\": 1,\n  \"token_id\": 1,\n  \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"goal_amount\": \"5000000000000000000\",\n  \"raised_amount\": \"3750000000000000000\",\n  \"royalty_percentage\": 2000,\n  \"deadline\": \"2025-11-20T10:30:45Z\",\n  \"lockup_period\": 90,\n  \"status\": \"active\",\n  \"funds_withdrawn\": false,\n  \"risk_score\": 45,\n  \"is_trending\": true,\n  \"estimated_roi\": 180.5,\n  \"contributor_count\": 12,\n  \"created_at\": \"2025-10-20T10:30:45Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List Campaigns",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/campaigns?status=active&limit=20",
+							"query": [
+								{"key": "status", "value": "active"},
+								{"key": "limit", "value": "20"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"campaigns\": [\n    {\n      \"id\": 1,\n      \"campaign_id\": 1,\n      \"token_id\": 1,\n      \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"goal_amount\": \"5000000000000000000\",\n      \"raised_amount\": \"3750000000000000000\",\n      \"royalty_percentage\": 2000,\n      \"status\": \"active\",\n      \"risk_score\": 45,\n      \"estimated_roi\": 180.5,\n      \"contributor_count\": 12,\n      \"is_trending\": true\n    },\n    {\n      \"id\": 2,\n      \"campaign_id\": 2,\n      \"token_id\": 3,\n      \"creator_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n      \"goal_amount\": \"3000000000000000000\",\n      \"raised_amount\": \"2100000000000000000\",\n      \"royalty_percentage\": 1500,\n      \"status\": \"active\",\n      \"risk_score\": 38,\n      \"estimated_roi\": 165.0,\n      \"contributor_count\": 8,\n      \"is_trending\": false\n    }\n  ],\n  \"total\": 2,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Contribute to Campaign",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"contributor_address\": \"{{test_address}}\",\n  \"amount\": \"1000000000000000000\"\n}"
+						},
+						"url": "{{base_url}}/api/v1/campaigns/{{test_campaign_id}}/contribute"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Contribution successful\",\n  \"contribution\": {\n    \"id\": 1,\n    \"campaign_id\": 1,\n    \"contributor_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n    \"amount\": \"1000000000000000000\",\n    \"share_percentage\": 20.0,\n    \"tx_hash\": \"0x1234567890abcdef...\",\n    \"contributed_at\": \"2025-10-20T10:30:45Z\"\n  }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "3. Royalties (2)",
+			"item": [
+				{
+					"name": "Get Royalties by Token",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/royalties/token/{{test_token_id}}"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"payments\": [\n    {\n      \"id\": 1,\n      \"token_id\": 1,\n      \"from\": \"0xSpotifyPlatform...\",\n      \"amount\": \"1500000000000000000\",\n      \"platform\": \"Spotify\",\n      \"usage_type\": \"streaming\",\n      \"tx_hash\": \"0xabcdef...\",\n      \"is_distributed\": true,\n      \"distributed_at\": \"2025-10-20T14:30:00Z\",\n      \"paid_at\": \"2025-10-20T14:00:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"token_id\": 1,\n      \"from\": \"0xTikTokPlatform...\",\n      \"amount\": \"750000000000000000\",\n      \"platform\": \"TikTok\",\n      \"usage_type\": \"video_use\",\n      \"tx_hash\": \"0xfedcba...\",\n      \"is_distributed\": true,\n      \"distributed_at\": \"2025-10-19T10:15:00Z\",\n      \"paid_at\": \"2025-10-19T10:00:00Z\"\n    }\n  ],\n  \"total_amount\": \"2250000000000000000\",\n  \"payment_count\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Simulate Royalty Payment",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token_id\": 1,\n  \"platform\": \"TikTok\",\n  \"amount\": \"100000000000000000\"\n}"
+						},
+						"url": "{{base_url}}/api/v1/royalties/simulate"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Royalty payment simulated successfully\",\n  \"payment\": {\n    \"id\": 3,\n    \"token_id\": 1,\n    \"from\": \"0xTikTokSimulated...\",\n    \"amount\": \"100000000000000000\",\n    \"platform\": \"TikTok\",\n    \"usage_type\": \"simulation\",\n    \"tx_hash\": \"0xsimulated123...\",\n    \"is_distributed\": false,\n    \"paid_at\": \"2025-10-20T15:00:00Z\"\n  },\n  \"distributions\": [\n    {\n      \"beneficiary\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"amount\": \"50000000000000000\",\n      \"percentage\": 50.0\n    },\n    {\n      \"beneficiary\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n      \"amount\": \"30000000000000000\",\n      \"percentage\": 30.0\n    },\n    {\n      \"beneficiary\": \"0xContributor3...\",\n      \"amount\": \"20000000000000000\",\n      \"percentage\": 20.0\n    }\n  ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "4. Users (2)",
+			"item": [
+				{
+					"name": "Get User Profile",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/users/{{test_address}}"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"id\": 1,\n  \"wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"username\": \"djcool\",\n  \"email\": \"djcool@example.com\",\n  \"role\": \"both\",\n  \"is_verified\": true,\n  \"reputation_score\": 850,\n  \"display_name\": \"DJ Cool\",\n  \"bio\": \"Electronic music producer and artist\",\n  \"avatar_url\": \"https://ipfs.io/ipfs/QmAvatar...\",\n  \"tier\": \"Rising Star\",\n  \"leaderboard_rank\": 5,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_works\": 3,\n  \"created_at\": \"2025-09-15T08:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Reputation",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/users/{{test_address}}/reputation"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"reputation_score\": 850,\n  \"tier\": \"Rising Star\",\n  \"leaderboard_rank\": 5,\n  \"total_works\": 3,\n  \"total_earnings\": \"2500000000000000000\",\n  \"successful_campaigns\": 1,\n  \"active_campaigns\": 2,\n  \"contribution_count\": 5,\n  \"is_verified\": true,\n  \"badges\": [\n    \"Early Adopter\",\n    \"Verified Creator\",\n    \"Top 10 This Week\"\n  ]\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "5. Dashboard (8)",
+			"item": [
+				{
+					"name": "Get Dashboard Overview",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/overview?address={{test_address}}",
+							"query": [{"key": "address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"total_music\": 3,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_listeners\": 45000,\n  \"total_views\": 150000,\n  \"total_plays\": 89000,\n  \"active_campaigns\": 2,\n  \"successful_campaigns\": 1,\n  \"tier\": \"Rising Star\",\n  \"is_verified\": true,\n  \"leaderboard_rank\": 5\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Quick Stats",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/quick-stats?address={{test_address}}",
+							"query": [{"key": "address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"today_earnings\": \"150000000000000000\",\n  \"today_earnings_usd\": 375.0,\n  \"weekly_growth\": 45.3,\n  \"new_listeners_this_week\": 1250,\n  \"trending_songs\": 1,\n  \"active_campaigns\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Trending Pools",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/trending-pools?limit=5",
+							"query": [{"key": "limit", "value": "5"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"pools\": [\n    {\n      \"campaign_id\": 1,\n      \"music_title\": \"Summer Vibes\",\n      \"music_artist\": \"DJ Cool\",\n      \"creator_name\": \"John Doe\",\n      \"creator_verified\": true,\n      \"goal_amount\": \"5000000000000000000\",\n      \"raised_amount\": \"3750000000000000000\",\n      \"funding_percentage\": 75.0,\n      \"risk_score\": 25,\n      \"estimated_roi\": 180.5,\n      \"contributor_count\": 12,\n      \"is_trending\": true,\n      \"status\": \"active\"\n    }\n  ],\n  \"total\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Recent Activities",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/activities?address={{test_address}}&limit=10",
+							"query": [
+								{"key": "address", "value": "{{test_address}}"},
+								{"key": "limit", "value": "10"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"activities\": [\n    {\n      \"id\": 1,\n      \"type\": \"royalty_received\",\n      \"title\": \"Royalty Payment Received\",\n      \"description\": \"Received 1.5 ETH from Spotify streaming\",\n      \"related_id\": 1,\n      \"tx_hash\": \"0xabcdef...\",\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"type\": \"music_registered\",\n      \"title\": \"New Music Registered\",\n      \"description\": \"Midnight Dreams has been registered as NFT #1\",\n      \"related_id\": 1,\n      \"tx_hash\": \"0x123456...\",\n      \"created_at\": \"2025-10-20T10:30:45Z\"\n    }\n  ],\n  \"total\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Music Trends",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/music-trends?address={{test_address}}&days=30",
+							"query": [
+								{"key": "address", "value": "{{test_address}}"},
+								{"key": "days", "value": "30"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"period\": \"30_days\",\n  \"data_points\": [\n    {\"date\": \"2025-09-21\", \"plays\": 150, \"views\": 450, \"listeners\": 120},\n    {\"date\": \"2025-09-28\", \"plays\": 300, \"views\": 900, \"listeners\": 250},\n    {\"date\": \"2025-10-05\", \"plays\": 650, \"views\": 1800, \"listeners\": 520},\n    {\"date\": \"2025-10-12\", \"plays\": 1200, \"views\": 3500, \"listeners\": 980},\n    {\"date\": \"2025-10-19\", \"plays\": 2100, \"views\": 6300, \"listeners\": 1750}\n  ],\n  \"total_growth\": 1300.0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Viral Performance",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/viral-performance?address={{test_address}}",
+							"query": [{"key": "address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"top_viral_songs\": [\n    {\n      \"token_id\": 1,\n      \"title\": \"Midnight Dreams\",\n      \"viral_score\": 85.5,\n      \"play_count\": 5000,\n      \"view_count\": 15000,\n      \"trending_platforms\": [\"TikTok\", \"Spotify\"]\n    }\n  ],\n  \"average_viral_score\": 75.2,\n  \"trending_count\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Weekly Progress",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/weekly-progress?address={{test_address}}",
+							"query": [{"key": "address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"earnings_growth\": 35.5,\n  \"listener_growth\": 42.8,\n  \"view_growth\": 58.3,\n  \"campaign_progress\": 15.0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Royalty Pulse",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/dashboard/royalty-pulse?address={{test_address}}",
+							"query": [{"key": "address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"last_24h_payments\": [\n    {\n      \"platform\": \"Spotify\",\n      \"amount\": \"1500000000000000000\",\n      \"amount_usd\": 3750.0,\n      \"timestamp\": \"2025-10-20T14:00:00Z\"\n    },\n    {\n      \"platform\": \"TikTok\",\n      \"amount\": \"750000000000000000\",\n      \"amount_usd\": 1875.0,\n      \"timestamp\": \"2025-10-20T08:30:00Z\"\n    }\n  ],\n  \"total_24h\": \"2250000000000000000\",\n  \"total_24h_usd\": 5625.0,\n  \"payment_count\": 2\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "6. Analytics (8)",
+			"item": [
+				{
+					"name": "Get Platform Stats",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/analytics/{{test_token_id}}/platform-stats"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"title\": \"Midnight Dreams\",\n  \"artist\": \"DJ Cool\",\n  \"stats\": {\n    \"spotify\": {\n      \"platform\": \"Spotify\",\n      \"plays\": 25000,\n      \"listeners\": 16250,\n      \"growth\": 520.5\n    },\n    \"tiktok\": {\n      \"platform\": \"TikTok\",\n      \"views\": 75000,\n      \"uses\": 125,\n      \"growth\": 248.2\n    },\n    \"apple_music\": {\n      \"platform\": \"Apple Music\",\n      \"plays\": 15000,\n      \"listeners\": 10500,\n      \"growth\": 70.8\n    }\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Viral Score",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/analytics/{{test_token_id}}/viral-score"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"viral_score\": 85.5,\n  \"breakdown\": {\n    \"engagement_score\": 90.0,\n    \"growth_score\": 85.0,\n    \"reach_score\": 82.0,\n    \"platform_diversity\": 85.0\n  },\n  \"trending_platforms\": [\"TikTok\", \"Spotify\"],\n  \"is_trending\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Growth Metrics",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/analytics/{{test_token_id}}/growth?period=week",
+							"query": [{"key": "period", "value": "week"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"period\": \"week\",\n  \"spotify_growth\": 25.5,\n  \"tiktok_growth\": 150.2,\n  \"apple_music_growth\": 15.8,\n  \"overall_growth\": 63.8,\n  \"listener_growth\": 42.8,\n  \"view_growth\": 58.3\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Listener Metrics",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/analytics/{{test_token_id}}/listeners"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"total_listeners\": 3500,\n  \"unique_listeners_7d\": 1250,\n  \"unique_listeners_30d\": 3200,\n  \"listener_growth_7d\": 42.8,\n  \"listener_growth_30d\": 125.5,\n  \"top_locations\": [\n    {\"country\": \"United States\", \"count\": 1200},\n    {\"country\": \"United Kingdom\", \"count\": 850},\n    {\"country\": \"Canada\", \"count\": 520}\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get View Metrics",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/analytics/{{test_token_id}}/views"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"total_views\": 15000,\n  \"total_plays\": 5000,\n  \"views_7d\": 3500,\n  \"plays_7d\": 1200,\n  \"view_to_play_ratio\": 3.0,\n  \"average_watch_time\": 180,\n  \"completion_rate\": 75.5\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Trending Indicators",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/analytics/{{test_token_id}}/trending"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"is_trending\": true,\n  \"trending_rank\": 5,\n  \"trending_platforms\": [\n    {\"platform\": \"TikTok\", \"trend_score\": 92.5},\n    {\"platform\": \"Spotify\", \"trend_score\": 78.3}\n  ],\n  \"velocity_score\": 88.5,\n  \"momentum\": \"accelerating\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Estimated Reach",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/analytics/{{test_token_id}}/reach"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"estimated_reach\": 25000,\n  \"direct_reach\": 15000,\n  \"viral_reach\": 10000,\n  \"reach_by_platform\": {\n    \"spotify\": 8000,\n    \"tiktok\": 12000,\n    \"apple_music\": 5000\n  },\n  \"potential_reach_30d\": 75000\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Top Songs",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/analytics/global/top-songs?limit=10",
+							"query": [{"key": "limit", "value": "10"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"songs\": [\n    {\n      \"token_id\": 5,\n      \"title\": \"Summer Vibes\",\n      \"artist\": \"Jane Beats\",\n      \"viral_score\": 95.8,\n      \"play_count\": 25000,\n      \"view_count\": 75000,\n      \"trending_rank\": 1\n    },\n    {\n      \"token_id\": 1,\n      \"title\": \"Midnight Dreams\",\n      \"artist\": \"DJ Cool\",\n      \"viral_score\": 85.5,\n      \"play_count\": 5000,\n      \"view_count\": 15000,\n      \"trending_rank\": 5\n    }\n  ],\n  \"total\": 2\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "7. Wallet (4)",
+			"item": [
+				{
+					"name": "Get Transactions",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/wallet/{{test_address}}/transactions?limit=20&offset=0",
+							"query": [
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"transactions\": [\n    {\n      \"id\": 1,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"type\": \"royalty\",\n      \"amount\": \"1500000000000000000\",\n      \"tx_hash\": \"0xabcdef...\",\n      \"status\": \"confirmed\",\n      \"description\": \"Royalty payment from Spotify\",\n      \"related_id\": 1,\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"type\": \"invest\",\n      \"amount\": \"1000000000000000000\",\n      \"tx_hash\": \"0x123456...\",\n      \"status\": \"confirmed\",\n      \"description\": \"Contributed to campaign #2\",\n      \"related_id\": 2,\n      \"created_at\": \"2025-10-19T10:15:00Z\"\n    }\n  ],\n  \"total\": 2,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Balance",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/wallet/{{test_address}}/balance"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"balance_wei\": \"320000000000000000\",\n  \"balance_eth\": 0.32,\n  \"balance_usd\": 800.0,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_invested\": \"1000000000000000000\",\n  \"eth_price_usd\": 2500.0\n}"
+						}
+					]
+				},
+				{
+					"name": "Search Transactions",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/wallet/{{test_address}}/search?q=royalty&limit=20",
+							"query": [
+								{"key": "q", "value": "royalty"},
+								{"key": "limit", "value": "20"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"transactions\": [\n    {\n      \"id\": 1,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"type\": \"royalty\",\n      \"amount\": \"1500000000000000000\",\n      \"tx_hash\": \"0xabcdef...\",\n      \"status\": \"confirmed\",\n      \"description\": \"Royalty payment from Spotify\",\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    }\n  ],\n  \"query\": \"royalty\",\n  \"total\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Savings",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/wallet/{{test_address}}/savings"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"total_saved\": 201.56,\n  \"estimated_savings\": 351.67,\n  \"savings_source\": \"Staking fee discount (10%)\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "8. Leaderboard (3)",
+			"item": [
+				{
+					"name": "Get Top Artists",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/leaderboard/top-artists?limit=10",
+							"query": [{"key": "limit", "value": "10"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"leaderboard\": [\n    {\n      \"rank\": 1,\n      \"wallet_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n      \"display_name\": \"Jane Beats\",\n      \"tier\": \"Legendary Creator\",\n      \"is_verified\": true,\n      \"total_works\": 15,\n      \"total_earnings\": \"50000000000000000000\",\n      \"total_campaigns\": 8,\n      \"score\": 2500.5\n    },\n    {\n      \"rank\": 5,\n      \"wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"display_name\": \"DJ Cool\",\n      \"tier\": \"Rising Star\",\n      \"is_verified\": true,\n      \"total_works\": 3,\n      \"total_earnings\": \"2500000000000000000\",\n      \"total_campaigns\": 2,\n      \"score\": 850.0\n    }\n  ],\n  \"total\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Rank",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/leaderboard/{{test_address}}/rank"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"rank\": 5,\n  \"display_name\": \"DJ Cool\",\n  \"tier\": \"Rising Star\",\n  \"score\": 850.0,\n  \"total_users\": 150,\n  \"percentile\": 96.7\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Leaderboard Stats",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/leaderboard/stats"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"total_creators\": 150,\n  \"total_works\": 450,\n  \"total_earnings\": \"125000000000000000000\",\n  \"average_score\": 425.5,\n  \"top_tier_count\": 10,\n  \"verified_count\": 75\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "9. Portfolio (4)",
+			"item": [
+				{
+					"name": "Get Portfolio",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/portfolio/{{test_address}}"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"display_name\": \"DJ Cool\",\n  \"tier\": \"Rising Star\",\n  \"is_verified\": true,\n  \"total_music\": 3,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_invested\": \"1000000000000000000\",\n  \"active_campaigns\": 2,\n  \"successful_campaigns\": 1,\n  \"portfolio_value_eth\": 15.5,\n  \"portfolio_value_usd\": 38750.0,\n  \"music_stats\": {\n    \"total_plays\": 89000,\n    \"total_views\": 150000,\n    \"total_listeners\": 45000,\n    \"avg_viral_score\": 72.5\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Growth Stats",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/portfolio/{{test_address}}/growth?period=month",
+							"query": [{"key": "period", "value": "month"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"period\": \"month\",\n  \"earnings_growth\": 125.5,\n  \"listener_growth\": 85.3,\n  \"portfolio_value_growth\": 95.2,\n  \"new_music_count\": 2,\n  \"new_campaigns\": 1\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Performance Metrics",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/portfolio/{{test_address}}/performance"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"songs\": [\n    {\n      \"token_id\": 1,\n      \"title\": \"Midnight Dreams\",\n      \"plays\": 5000,\n      \"views\": 15000,\n      \"listeners\": 3500,\n      \"viral_score\": 85.5,\n      \"earnings\": \"1500000000000000000\",\n      \"growth_7d\": 42.8\n    },\n    {\n      \"token_id\": 2,\n      \"title\": \"Sunset Boulevard\",\n      \"plays\": 3200,\n      \"views\": 9500,\n      \"listeners\": 2100,\n      \"viral_score\": 68.2,\n      \"earnings\": \"850000000000000000\",\n      \"growth_7d\": 25.3\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Pools Invested",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/portfolio/{{test_address}}/pools"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"investments\": [\n    {\n      \"campaign_id\": 2,\n      \"token_id\": 3,\n      \"music_title\": \"Ocean Dreams\",\n      \"music_artist\": \"Wave Riders\",\n      \"invested_amount\": \"1000000000000000000\",\n      \"share_percentage\": 15.0,\n      \"current_value\": \"1250000000000000000\",\n      \"roi\": 25.0,\n      \"status\": \"active\"\n    }\n  ],\n  \"total_invested\": \"1000000000000000000\",\n  \"total_current_value\": \"1250000000000000000\",\n  \"total_roi\": 25.0\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "10. Distribution Hub (5) - NEW",
+			"item": [
+				{
+					"name": "Submit Distribution",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"token_id\": 1,\n  \"user_address\": \"{{test_address}}\",\n  \"platforms\": [\"spotify\", \"tiktok\", \"apple_music\", \"youtube_music\"]\n}"
+						},
+						"url": "{{base_url}}/api/v1/distribution/submit"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Distribution submitted successfully\",\n  \"submission\": {\n    \"id\": 1,\n    \"token_id\": 1,\n    \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n    \"platforms\": \"[\\\"spotify\\\",\\\"tiktok\\\",\\\"apple_music\\\",\\\"youtube_music\\\"]\",\n    \"status\": \"processing\",\n    \"submitted_at\": \"2025-10-20T10:30:45Z\",\n    \"created_at\": \"2025-10-20T10:30:45Z\",\n    \"updated_at\": \"2025-10-20T10:30:45Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Distribution Status",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/distribution/{{test_token_id}}/status"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"status\": \"distributed\",\n  \"submitted_at\": \"2025-10-20T10:30:45Z\",\n  \"platforms\": [\n    {\n      \"platform\": \"spotify\",\n      \"status\": \"live\",\n      \"external_id\": \"3vBYPYv7nXKJ8nKnf3F7qR\",\n      \"external_url\": \"https://open.spotify.com/track/3vBYPYv7nXKJ8nKnf3F7qR\",\n      \"distributed_at\": \"2025-10-20T12:00:00Z\"\n    },\n    {\n      \"platform\": \"tiktok\",\n      \"status\": \"live\",\n      \"external_id\": \"7234567890123456789\",\n      \"external_url\": \"https://tiktok.com/music/7234567890123456789\",\n      \"distributed_at\": \"2025-10-20T11:45:00Z\"\n    },\n    {\n      \"platform\": \"apple_music\",\n      \"status\": \"pending\",\n      \"external_id\": \"\",\n      \"external_url\": \"\",\n      \"distributed_at\": null\n    },\n    {\n      \"platform\": \"youtube_music\",\n      \"status\": \"live\",\n      \"external_id\": \"dQw4w9WgXcQ\",\n      \"external_url\": \"https://music.youtube.com/watch?v=dQw4w9WgXcQ\",\n      \"distributed_at\": \"2025-10-20T13:15:00Z\"\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Platform Status",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/distribution/{{test_token_id}}/platform/spotify"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"id\": 1,\n  \"token_id\": 1,\n  \"platform\": \"spotify\",\n  \"status\": \"live\",\n  \"external_id\": \"3vBYPYv7nXKJ8nKnf3F7qR\",\n  \"external_url\": \"https://open.spotify.com/track/3vBYPYv7nXKJ8nKnf3F7qR\",\n  \"distributed_at\": \"2025-10-20T12:00:00Z\",\n  \"created_at\": \"2025-10-20T10:30:45Z\",\n  \"updated_at\": \"2025-10-20T12:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Platform Status",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"live\",\n  \"external_id\": \"3vBYPYv7nXKJ8nKnf3F7qR\",\n  \"external_url\": \"https://open.spotify.com/track/3vBYPYv7nXKJ8nKnf3F7qR\"\n}"
+						},
+						"url": "{{base_url}}/api/v1/distribution/{{test_token_id}}/platform/spotify"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Platform status updated successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "List Distributions",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/distribution/list?user_address={{test_address}}&limit=20&offset=0",
+							"query": [
+								{"key": "user_address", "value": "{{test_address}}"},
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"token_id\": 1,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"platforms\": \"[\\\"spotify\\\",\\\"tiktok\\\",\\\"apple_music\\\",\\\"youtube_music\\\"]\",\n      \"status\": \"distributed\",\n      \"submitted_at\": \"2025-10-20T10:30:45Z\",\n      \"created_at\": \"2025-10-20T10:30:45Z\",\n      \"updated_at\": \"2025-10-20T13:15:00Z\"\n    }\n  ],\n  \"total\": 1,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "11. Notifications (7) - NEW",
+			"item": [
+				{
+					"name": "Get Notifications",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications?user_address={{test_address}}&limit=20&offset=0",
+							"query": [
+								{"key": "user_address", "value": "{{test_address}}"},
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"},
+								{"key": "unread_only", "value": "false", "disabled": true}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"type\": \"payment\",\n      \"title\": \"Royalty Payment Received\",\n      \"message\": \"You received a royalty payment of 1500000000000000000 wei\",\n      \"is_read\": false,\n      \"related_id\": 1,\n      \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n      \"created_at\": \"2025-10-20T14:30:00Z\",\n      \"updated_at\": \"2025-10-20T14:30:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"type\": \"contribution\",\n      \"title\": \"Contribution Confirmed\",\n      \"message\": \"Your contribution of 5000000000000000000 wei has been confirmed\",\n      \"is_read\": true,\n      \"related_id\": 2,\n      \"tx_hash\": \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\",\n      \"created_at\": \"2025-10-19T10:15:00Z\",\n      \"updated_at\": \"2025-10-19T15:00:00Z\"\n    },\n    {\n      \"id\": 3,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"type\": \"milestone\",\n      \"title\": \"Milestone Reached\",\n      \"message\": \"Campaign milestone reached: 75% funded\",\n      \"is_read\": false,\n      \"related_id\": 2,\n      \"tx_hash\": \"\",\n      \"created_at\": \"2025-10-20T09:00:00Z\",\n      \"updated_at\": \"2025-10-20T09:00:00Z\"\n    }\n  ],\n  \"total\": 3,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Unread Count",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/unread/count?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"unread_count\": 2\n}"
+						}
+					]
+				},
+				{
+					"name": "Mark As Read",
+					"request": {
+						"method": "PUT",
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/1/read?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Notification marked as read\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Mark All As Read",
+					"request": {
+						"method": "PUT",
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/read-all?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"All notifications marked as read\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete Notification",
+					"request": {
+						"method": "DELETE",
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/1?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Notification deleted\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Preferences",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/preferences?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"id\": 1,\n  \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"email_notifications\": true,\n  \"royalty_alerts\": true,\n  \"contribution_alerts\": true,\n  \"milestone_alerts\": true,\n  \"marketing_emails\": false,\n  \"created_at\": \"2025-10-15T08:00:00Z\",\n  \"updated_at\": \"2025-10-15T08:00:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Preferences",
+					"request": {
+						"method": "PUT",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email_notifications\": true,\n  \"royalty_alerts\": true,\n  \"contribution_alerts\": false,\n  \"milestone_alerts\": true,\n  \"marketing_emails\": false\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/notifications/preferences?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Preferences updated successfully\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "12. Ledger & Splits (4) - NEW",
+			"item": [
+				{
+					"name": "Get Split History",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/ledger/{{test_token_id}}/splits?limit=20&offset=0",
+							"query": [
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"total_splits\": 5,\n  \"total_amount\": \"7500000000000000000\",\n  \"split_records\": [\n    {\n      \"id\": 1,\n      \"payment_id\": 1,\n      \"total_amount\": \"1500000000000000000\",\n      \"split_count\": 3,\n      \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n      \"block_number\": 18234567,\n      \"block_timestamp\": \"2025-10-20T14:30:00Z\",\n      \"distributions\": [\n        {\n          \"id\": 1,\n          \"payment_id\": 1,\n          \"token_id\": 1,\n          \"beneficiary\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n          \"amount\": \"750000000000000000\",\n          \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n          \"distributed_at\": \"2025-10-20T14:30:00Z\",\n          \"created_at\": \"2025-10-20T14:30:00Z\"\n        },\n        {\n          \"id\": 2,\n          \"payment_id\": 1,\n          \"token_id\": 1,\n          \"beneficiary\": \"0x1234567890abcdef1234567890abcdef12345678\",\n          \"amount\": \"450000000000000000\",\n          \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n          \"distributed_at\": \"2025-10-20T14:30:00Z\",\n          \"created_at\": \"2025-10-20T14:30:00Z\"\n        },\n        {\n          \"id\": 3,\n          \"payment_id\": 1,\n          \"token_id\": 1,\n          \"beneficiary\": \"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\n          \"amount\": \"300000000000000000\",\n          \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n          \"distributed_at\": \"2025-10-20T14:30:00Z\",\n          \"created_at\": \"2025-10-20T14:30:00Z\"\n        }\n      ],\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Contributor Breakdown",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/ledger/{{test_token_id}}/contributors"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"token_id\": 1,\n  \"total_payments\": 3,\n  \"contributors\": [\n    {\n      \"beneficiary\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"total_amount\": \"3750000000000000000\",\n      \"payment_count\": 5,\n      \"last_payment\": \"2025-10-20T14:30:00Z\"\n    },\n    {\n      \"beneficiary\": \"0x1234567890abcdef1234567890abcdef12345678\",\n      \"total_amount\": \"2250000000000000000\",\n      \"payment_count\": 5,\n      \"last_payment\": \"2025-10-20T14:30:00Z\"\n    },\n    {\n      \"beneficiary\": \"0xabcdefabcdefabcdefabcdefabcdefabcdefabcd\",\n      \"total_amount\": \"1500000000000000000\",\n      \"payment_count\": 5,\n      \"last_payment\": \"2025-10-20T14:30:00Z\"\n    }\n  ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Audit Split by TxHash",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/ledger/audit/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"id\": 1,\n  \"payment_id\": 1,\n  \"total_amount\": \"1500000000000000000\",\n  \"split_count\": 3,\n  \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n  \"block_number\": 18234567,\n  \"block_timestamp\": \"2025-10-20T14:30:00Z\",\n  \"distributions\": [\n    {\n      \"id\": 1,\n      \"payment_id\": 1,\n      \"token_id\": 1,\n      \"beneficiary\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"amount\": \"750000000000000000\",\n      \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n      \"distributed_at\": \"2025-10-20T14:30:00Z\",\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"payment_id\": 1,\n      \"token_id\": 1,\n      \"beneficiary\": \"0x1234567890abcdef1234567890abcdef12345678\",\n      \"amount\": \"450000000000000000\",\n      \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n      \"distributed_at\": \"2025-10-20T14:30:00Z\",\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    }\n  ],\n  \"created_at\": \"2025-10-20T14:30:00Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User Ledger",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/ledger/user/{{test_address}}?limit=20&offset=0",
+							"query": [
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"data\": [\n    {\n      \"id\": 1,\n      \"payment_id\": 1,\n      \"token_id\": 1,\n      \"beneficiary\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"amount\": \"750000000000000000\",\n      \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n      \"distributed_at\": \"2025-10-20T14:30:00Z\",\n      \"created_at\": \"2025-10-20T14:30:00Z\"\n    }\n  ],\n  \"total\": 5,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "13. Transaction Audit (3) - NEW",
+			"item": [
+				{
+					"name": "Audit Transaction",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/audit/transaction/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n  \"type\": \"royalty\",\n  \"status\": \"confirmed\",\n  \"amount\": \"1500000000000000000\",\n  \"from_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"description\": \"Royalty payment from Spotify\",\n  \"timestamp\": \"2025-10-20T14:30:00Z\",\n  \"block_number\": 18234567,\n  \"gas_used\": 21000,\n  \"explorer_url\": \"https://etherscan.io/tx/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n  \"royalty_details\": {\n    \"token_id\": 1,\n    \"beneficiary\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n    \"amount\": \"750000000000000000\",\n    \"distributed_at\": \"2025-10-20T14:30:00Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Verify Transaction",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/audit/verify/0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"tx_hash\": \"0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890\",\n  \"verified\": true,\n  \"confirmations\": 12,\n  \"block_number\": 18234567,\n  \"timestamp\": \"2025-10-20T10:30:45Z\",\n  \"status\": \"confirmed\",\n  \"message\": \"Transaction verified on-chain\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Block Details",
+					"request": {
+						"method": "GET",
+						"url": "{{base_url}}/api/v1/audit/block/18234567"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"block_number\": 18234567,\n  \"timestamp\": \"2025-10-20T10:30:45Z\",\n  \"miner\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"gas_used\": 21000,\n  \"gas_limit\": 30000000,\n  \"transactions\": 156,\n  \"explorer_url\": \"https://etherscan.io/block/18234567\"\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "14. Reinvestment (4) - NEW",
+			"item": [
+				{
+					"name": "Get Reinvestment Suggestions",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/reinvest/suggestions?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n  \"available_funds\": \"3750000000000000000\",\n  \"suggested_pools\": [\n    {\n      \"campaign_id\": 3,\n      \"token_id\": 3,\n      \"music_title\": \"Summer Vibes\",\n      \"music_artist\": \"DJ Tropical\",\n      \"royalty_percentage\": 1500,\n      \"estimated_roi\": 185.5,\n      \"risk_score\": 35,\n      \"reasoning\": \"High ROI potential (185.5%) with low risk score (35/100). Currently 75.0% funded.\"\n    },\n    {\n      \"campaign_id\": 5,\n      \"token_id\": 5,\n      \"music_title\": \"Midnight City\",\n      \"music_artist\": \"The Neon Band\",\n      \"royalty_percentage\": 2000,\n      \"estimated_roi\": 172.3,\n      \"risk_score\": 42,\n      \"reasoning\": \"High ROI potential (172.3%) with low risk score (42/100). Currently 75.0% funded.\"\n    },\n    {\n      \"campaign_id\": 7,\n      \"token_id\": 7,\n      \"music_title\": \"Ocean Dreams\",\n      \"music_artist\": \"Wave Riders\",\n      \"royalty_percentage\": 1800,\n      \"estimated_roi\": 165.0,\n      \"risk_score\": 38,\n      \"reasoning\": \"High ROI potential (165.0%) with low risk score (38/100). Currently 75.0% funded.\"\n    }\n  ],\n  \"total_expected_roi\": 174.27\n}"
+						}
+					]
+				},
+				{
+					"name": "Quick Reinvest",
+					"request": {
+						"method": "POST",
+						"header": [{"key": "Content-Type", "value": "application/json"}],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"user_address\": \"{{test_address}}\",\n  \"campaign_id\": 3,\n  \"amount\": \"1000000000000000000\",\n  \"from_source\": \"royalty\"\n}"
+						},
+						"url": "{{base_url}}/api/v1/reinvest/quick"
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"message\": \"Reinvestment successful\",\n  \"history\": {\n    \"id\": 1,\n    \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n    \"from_source\": \"royalty\",\n    \"to_campaign_id\": 3,\n    \"amount\": \"1000000000000000000\",\n    \"tx_hash\": \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\",\n    \"suggestion_id\": null,\n    \"created_at\": \"2025-10-20T15:00:00Z\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Reinvestment History",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/reinvest/history?user_address={{test_address}}&limit=20&offset=0",
+							"query": [
+								{"key": "user_address", "value": "{{test_address}}"},
+								{"key": "limit", "value": "20"},
+								{"key": "offset", "value": "0"}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"data\": [\n    {\n      \"id\": 1,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"from_source\": \"royalty\",\n      \"to_campaign_id\": 3,\n      \"amount\": \"1000000000000000000\",\n      \"tx_hash\": \"0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\",\n      \"suggestion_id\": null,\n      \"created_at\": \"2025-10-20T15:00:00Z\"\n    },\n    {\n      \"id\": 2,\n      \"user_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb\",\n      \"from_source\": \"royalty\",\n      \"to_campaign_id\": 5,\n      \"amount\": \"500000000000000000\",\n      \"tx_hash\": \"0xfedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321\",\n      \"suggestion_id\": 1,\n      \"created_at\": \"2025-10-19T12:30:00Z\"\n    }\n  ],\n  \"total\": 2,\n  \"limit\": 20,\n  \"offset\": 0\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Reinvestment Stats",
+					"request": {
+						"method": "GET",
+						"url": {
+							"raw": "{{base_url}}/api/v1/reinvest/stats?user_address={{test_address}}",
+							"query": [{"key": "user_address", "value": "{{test_address}}"}]
+						}
+					},
+					"response": [
+						{
+							"name": "Success",
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [{"key": "Content-Type", "value": "application/json"}],
+							"body": "{\n  \"total_reinvested\": \"1500000000000000000\",\n  \"reinvestment_count\": 2,\n  \"average_expected_roi\": 178.9\n}"
+						}
+					]
+				}
+			]
+		}
+	]
+}
