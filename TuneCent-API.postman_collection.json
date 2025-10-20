@@ -1,1304 +1,1499 @@
 {
-	"info": {
-		"_postman_id": "tunecent-api-collection",
-		"name": "TuneCent Backend API",
-		"description": "Complete API collection for TuneCent music rights management platform.\n\n**Base URL:** http://localhost:8080\n\n**Features:**\n- Music Registration with NFT minting\n- Crowdfunding Campaigns\n- Royalty Management\n- User Profiles & Reputation\n\n**Version:** 1.0.0-poc",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "Health & System",
-			"item": [
-				{
-					"name": "Health Check",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/health",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"health"
-							]
-						},
-						"description": "Check API health status and verify database and blockchain connections."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/health",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"health"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"status\": \"ok\",\n    \"service\": \"TuneCent Backend API\",\n    \"version\": \"1.0.0-poc\",\n    \"database\": \"ok\",\n    \"blockchain\": \"not_configured\"\n}"
-						}
-					]
-				}
-			],
-			"description": "System health and status endpoints"
-		},
-		{
-			"name": "Music",
-			"item": [
-				{
-					"name": "Register Music",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "creator_address",
-									"value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-									"description": "Ethereum wallet address of the creator",
-									"type": "text"
-								},
-								{
-									"key": "title",
-									"value": "Midnight Dreams",
-									"description": "Song title",
-									"type": "text"
-								},
-								{
-									"key": "artist",
-									"value": "John Doe",
-									"description": "Artist name",
-									"type": "text"
-								},
-								{
-									"key": "genre",
-									"value": "Electronic",
-									"description": "Music genre (optional)",
-									"type": "text"
-								},
-								{
-									"key": "description",
-									"value": "An ambient electronic track perfect for late night listening",
-									"description": "Description (optional)",
-									"type": "text"
-								},
-								{
-									"key": "duration",
-									"value": "240",
-									"description": "Duration in seconds",
-									"type": "text"
-								},
-								{
-									"key": "audio_file",
-									"description": "Audio file (MP3, WAV, etc)",
-									"type": "file",
-									"src": []
-								}
-							]
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/music/register",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"music",
-								"register"
-							]
-						},
-						"description": "Register a new music track with NFT minting and fingerprint generation.\n\n**Process:**\n1. Upload audio file\n2. Generate fingerprint\n3. Upload metadata to IPFS\n4. Mint NFT (mock for PoC)\n5. Save to database"
-					},
-					"response": [
-						{
-							"name": "Success - Music Registered",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "creator_address",
-											"value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-											"type": "text"
-										},
-										{
-											"key": "title",
-											"value": "Midnight Dreams",
-											"type": "text"
-										},
-										{
-											"key": "artist",
-											"value": "John Doe",
-											"type": "text"
-										},
-										{
-											"key": "genre",
-											"value": "Electronic",
-											"type": "text"
-										},
-										{
-											"key": "duration",
-											"value": "240",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/register",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"register"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"token_id\": 1729123456,\n    \"ipfs_cid\": \"QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG\",\n    \"fingerprint_hash\": \"a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a\",\n    \"tx_hash\": \"0x0000000000000000000000000000000000000000000000000000001729123456\",\n    \"message\": \"Music registered successfully\",\n    \"registered_at\": \"2025-10-17T00:44:16Z\"\n}"
-						},
-						{
-							"name": "Error - Missing Fields",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": [
-										{
-											"key": "title",
-											"value": "Test Song",
-											"type": "text"
-										}
-									]
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/register",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"register"
-									]
-								}
-							},
-							"status": "Bad Request",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Missing required fields\"\n}"
-						},
-						{
-							"name": "Error - Duplicate Fingerprint",
-							"originalRequest": {
-								"method": "POST",
-								"header": [],
-								"body": {
-									"mode": "formdata",
-									"formdata": []
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/register",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"register"
-									]
-								}
-							},
-							"status": "Internal Server Error",
-							"code": 500,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"music already registered with token ID: 1729123456\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Get Music by Token ID",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/music/:tokenId",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"music",
-								":tokenId"
-							],
-							"variable": [
-								{
-									"key": "tokenId",
-									"value": "1729123456",
-									"description": "NFT Token ID"
-								}
-							]
-						},
-						"description": "Retrieve detailed information about a specific music track by its token ID."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/1729123456",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"1729123456"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"token_id\": 1729123456,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"title\": \"Midnight Dreams\",\n    \"artist\": \"John Doe\",\n    \"genre\": \"Electronic\",\n    \"description\": \"An ambient electronic track perfect for late night listening\",\n    \"ipfs_cid\": \"QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG\",\n    \"fingerprint_hash\": \"a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a\",\n    \"duration\": 240,\n    \"is_active\": true,\n    \"tx_hash\": \"0x0000000000000000000000000000000000000000000000000000001729123456\",\n    \"registered_at\": \"2025-10-17T00:44:16Z\",\n    \"created_at\": \"2025-10-17T00:44:16Z\",\n    \"updated_at\": \"2025-10-17T00:44:16Z\"\n}"
-						},
-						{
-							"name": "Error - Not Found",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/999999",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"999999"
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Music not found\"\n}"
-						}
-					]
-				},
-				{
-					"name": "List All Music",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/music?limit=20&offset=0&creator=",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"music"
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "20",
-									"description": "Number of results (max 100)"
-								},
-								{
-									"key": "offset",
-									"value": "0",
-									"description": "Pagination offset"
-								},
-								{
-									"key": "creator",
-									"value": "",
-									"description": "Filter by creator address (optional)"
-								}
-							]
-						},
-						"description": "Get a paginated list of all registered music tracks. Optionally filter by creator address."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/music?limit=20&offset=0",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music"
-									],
-									"query": [
-										{
-											"key": "limit",
-											"value": "20"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"token_id\": 1729123456,\n            \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n            \"title\": \"Midnight Dreams\",\n            \"artist\": \"John Doe\",\n            \"genre\": \"Electronic\",\n            \"ipfs_cid\": \"QmYwAPJzv5CZsnA625s3Xf2nemtYgPpHdWEz79ojWnPbdG\",\n            \"is_active\": true,\n            \"registered_at\": \"2025-10-17T00:44:16Z\"\n        },\n        {\n            \"id\": 2,\n            \"token_id\": 1729123789,\n            \"creator_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n            \"title\": \"Summer Vibes\",\n            \"artist\": \"Jane Smith\",\n            \"genre\": \"Pop\",\n            \"ipfs_cid\": \"QmT5NvUtoM5nWFfrQdVrFtvGfKFmG7AHE8P34isapyhCxX\",\n            \"is_active\": true,\n            \"registered_at\": \"2025-10-17T01:15:30Z\"\n        }\n    ],\n    \"total\": 2,\n    \"limit\": 20,\n    \"offset\": 0\n}"
-						}
-					]
-				},
-				{
-					"name": "Get Music Analytics",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/music/:tokenId/analytics",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"music",
-								":tokenId",
-								"analytics"
-							],
-							"variable": [
-								{
-									"key": "tokenId",
-									"value": "1729123456",
-									"description": "NFT Token ID"
-								}
-							]
-						},
-						"description": "Get usage analytics for a specific music track including views, embeds, usages, and total royalties earned."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/1729123456/analytics",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"1729123456",
-										"analytics"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"token_id\": 1729123456,\n    \"total_views\": 15420,\n    \"total_embeds\": 342,\n    \"total_usages\": 1250,\n    \"total_royalties\": \"2500000000000000000\",\n    \"last_updated\": \"2025-10-17T05:30:00Z\",\n    \"created_at\": \"2025-10-17T00:44:16Z\",\n    \"updated_at\": \"2025-10-17T05:30:00Z\"\n}"
-						},
-						{
-							"name": "Error - Not Found",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/music/999999/analytics",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"music",
-										"999999",
-										"analytics"
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Analytics not found\"\n}"
-						}
-					]
-				}
-			],
-			"description": "Music registration, retrieval, and analytics endpoints"
-		},
-		{
-			"name": "Campaigns",
-			"item": [
-				{
-					"name": "Create Campaign",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"token_id\": 1729123456,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"goal_amount\": \"5000000000000000000\",\n    \"royalty_percentage\": 2000,\n    \"duration_days\": 30,\n    \"lockup_days\": 90\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/campaigns",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"campaigns"
-							]
-						},
-						"description": "Create a new crowdfunding campaign for a music NFT.\n\n**Fields:**\n- `token_id`: Music NFT token ID\n- `creator_address`: Creator's wallet address\n- `goal_amount`: Funding goal in wei (5 ETH = 5000000000000000000)\n- `royalty_percentage`: Royalty share in basis points (2000 = 20%)\n- `duration_days`: Campaign duration (1-90 days)\n- `lockup_days`: Lock-up period for investors"
-					},
-					"response": [
-						{
-							"name": "Success - Campaign Created",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"token_id\": 1729123456,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"goal_amount\": \"5000000000000000000\",\n    \"royalty_percentage\": 2000,\n    \"duration_days\": 30,\n    \"lockup_days\": 90\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"campaign_id\": 1,\n    \"token_id\": 1729123456,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"goal_amount\": \"5000000000000000000\",\n    \"raised_amount\": \"0\",\n    \"royalty_percentage\": 2000,\n    \"lockup_period\": 90,\n    \"status\": \"active\",\n    \"funds_withdrawn\": false,\n    \"tx_hash\": \"0xmock\",\n    \"created_at\": \"2025-10-17T00:50:00Z\",\n    \"updated_at\": \"2025-10-17T00:50:00Z\"\n}"
-						},
-						{
-							"name": "Error - Invalid Data",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"token_id\": 1729123456\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns"
-									]
-								}
-							},
-							"status": "Bad Request",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Key: 'creator_address' Error:Field validation for 'creator_address' failed on the 'required' tag\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Get Campaign",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/campaigns/:campaignId",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"campaigns",
-								":campaignId"
-							],
-							"variable": [
-								{
-									"key": "campaignId",
-									"value": "1",
-									"description": "Campaign ID"
-								}
-							]
-						},
-						"description": "Get details of a specific crowdfunding campaign."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns/1",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns",
-										"1"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"campaign_id\": 1,\n    \"token_id\": 1729123456,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"goal_amount\": \"5000000000000000000\",\n    \"raised_amount\": \"3200000000000000000\",\n    \"royalty_percentage\": 2000,\n    \"lockup_period\": 90,\n    \"status\": \"active\",\n    \"funds_withdrawn\": false,\n    \"tx_hash\": \"0xmock\",\n    \"created_at\": \"2025-10-17T00:50:00Z\",\n    \"updated_at\": \"2025-10-17T02:30:00Z\"\n}"
-						},
-						{
-							"name": "Error - Not Found",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns/999",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns",
-										"999"
-									]
-								}
-							},
-							"status": "Not Found",
-							"code": 404,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Campaign not found\"\n}"
-						}
-					]
-				},
-				{
-					"name": "List Campaigns",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/campaigns?status=active&limit=20&offset=0",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"campaigns"
-							],
-							"query": [
-								{
-									"key": "status",
-									"value": "active",
-									"description": "Filter by status: active, successful, failed, cancelled"
-								},
-								{
-									"key": "limit",
-									"value": "20",
-									"description": "Number of results"
-								},
-								{
-									"key": "offset",
-									"value": "0",
-									"description": "Pagination offset"
-								}
-							]
-						},
-						"description": "Get a paginated list of crowdfunding campaigns. Can filter by status."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns?status=active&limit=20&offset=0",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns"
-									],
-									"query": [
-										{
-											"key": "status",
-											"value": "active"
-										},
-										{
-											"key": "limit",
-											"value": "20"
-										},
-										{
-											"key": "offset",
-											"value": "0"
-										}
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"campaign_id\": 1,\n            \"token_id\": 1729123456,\n            \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n            \"goal_amount\": \"5000000000000000000\",\n            \"raised_amount\": \"3200000000000000000\",\n            \"royalty_percentage\": 2000,\n            \"status\": \"active\",\n            \"created_at\": \"2025-10-17T00:50:00Z\"\n        },\n        {\n            \"id\": 2,\n            \"campaign_id\": 2,\n            \"token_id\": 1729123789,\n            \"creator_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n            \"goal_amount\": \"2000000000000000000\",\n            \"raised_amount\": \"1500000000000000000\",\n            \"royalty_percentage\": 1500,\n            \"status\": \"active\",\n            \"created_at\": \"2025-10-17T01:20:00Z\"\n        }\n    ],\n    \"total\": 2,\n    \"limit\": 20,\n    \"offset\": 0\n}"
-						}
-					]
-				},
-				{
-					"name": "Contribute to Campaign",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"contributor_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n    \"amount\": \"1000000000000000000\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/campaigns/:campaignId/contribute",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"campaigns",
-								":campaignId",
-								"contribute"
-							],
-							"variable": [
-								{
-									"key": "campaignId",
-									"value": "1",
-									"description": "Campaign ID"
-								}
-							]
-						},
-						"description": "Contribute funds to a crowdfunding campaign.\n\n**Fields:**\n- `contributor_address`: Contributor's wallet address\n- `amount`: Contribution amount in wei (1 ETH = 1000000000000000000)"
-					},
-					"response": [
-						{
-							"name": "Success - Contribution Recorded",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"contributor_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n    \"amount\": \"1000000000000000000\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns/1/contribute",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns",
-										"1",
-										"contribute"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"campaign_id\": 1,\n    \"contributor_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n    \"amount\": \"1000000000000000000\",\n    \"share_percentage\": 0,\n    \"tx_hash\": \"0xmock\",\n    \"created_at\": \"2025-10-17T01:00:00Z\",\n    \"updated_at\": \"2025-10-17T01:00:00Z\"\n}"
-						},
-						{
-							"name": "Error - Invalid Amount",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"contributor_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/campaigns/1/contribute",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"campaigns",
-										"1",
-										"contribute"
-									]
-								}
-							},
-							"status": "Bad Request",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Key: 'amount' Error:Field validation for 'amount' failed on the 'required' tag\"\n}"
-						}
-					]
-				}
-			],
-			"description": "Crowdfunding campaign management endpoints"
-		},
-		{
-			"name": "Royalties",
-			"item": [
-				{
-					"name": "Get Royalties by Token",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/royalties/token/:tokenId",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"royalties",
-								"token",
-								":tokenId"
-							],
-							"variable": [
-								{
-									"key": "tokenId",
-									"value": "1729123456",
-									"description": "NFT Token ID"
-								}
-							]
-						},
-						"description": "Get all royalty payments received for a specific music token."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/royalties/token/1729123456",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"royalties",
-										"token",
-										"1729123456"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"token_id\": 1729123456,\n    \"payments\": [\n        {\n            \"id\": 1,\n            \"token_id\": 1729123456,\n            \"from\": \"0xPlatformSimulator\",\n            \"amount\": \"100000000000000000\",\n            \"platform\": \"TikTok\",\n            \"usage_type\": \"simulated\",\n            \"tx_hash\": \"0xmock\",\n            \"is_distributed\": false,\n            \"paid_at\": \"2025-10-17T02:00:00Z\",\n            \"created_at\": \"2025-10-17T02:00:00Z\"\n        },\n        {\n            \"id\": 2,\n            \"token_id\": 1729123456,\n            \"from\": \"0xPlatformSimulator\",\n            \"amount\": \"50000000000000000\",\n            \"platform\": \"Spotify\",\n            \"usage_type\": \"simulated\",\n            \"tx_hash\": \"0xmock\",\n            \"is_distributed\": false,\n            \"paid_at\": \"2025-10-17T03:15:00Z\",\n            \"created_at\": \"2025-10-17T03:15:00Z\"\n        }\n    ]\n}"
-						}
-					]
-				},
-				{
-					"name": "Simulate Royalty Payment",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"token_id\": 1729123456,\n    \"platform\": \"TikTok\",\n    \"amount\": \"100000000000000000\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{base_url}}/api/v1/royalties/simulate",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"royalties",
-								"simulate"
-							]
-						},
-						"description": "Simulate a royalty payment from a platform (for PoC demo purposes).\n\n**Fields:**\n- `token_id`: Music NFT token ID\n- `platform`: Platform name (TikTok, Spotify, YouTube, etc)\n- `amount`: Payment amount in wei (0.1 ETH = 100000000000000000)"
-					},
-					"response": [
-						{
-							"name": "Success - Payment Simulated",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"token_id\": 1729123456,\n    \"platform\": \"TikTok\",\n    \"amount\": \"100000000000000000\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/royalties/simulate",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"royalties",
-										"simulate"
-									]
-								}
-							},
-							"status": "Created",
-							"code": 201,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"message\": \"Royalty payment simulated successfully\",\n    \"payment\": {\n        \"id\": 1,\n        \"token_id\": 1729123456,\n        \"from\": \"0xPlatformSimulator\",\n        \"amount\": \"100000000000000000\",\n        \"platform\": \"TikTok\",\n        \"usage_type\": \"simulated\",\n        \"tx_hash\": \"0xmock\",\n        \"is_distributed\": false,\n        \"paid_at\": \"2025-10-17T02:00:00Z\",\n        \"created_at\": \"2025-10-17T02:00:00Z\"\n    }\n}"
-						},
-						{
-							"name": "Error - Missing Fields",
-							"originalRequest": {
-								"method": "POST",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/json"
-									}
-								],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"token_id\": 1729123456\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "{{base_url}}/api/v1/royalties/simulate",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"royalties",
-										"simulate"
-									]
-								}
-							},
-							"status": "Bad Request",
-							"code": 400,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"error\": \"Key: 'platform' Error:Field validation for 'platform' failed on the 'required' tag\"\n}"
-						}
-					]
-				}
-			],
-			"description": "Royalty payment and tracking endpoints"
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get User Profile",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/users/:address",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								":address"
-							],
-							"variable": [
-								{
-									"key": "address",
-									"value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-									"description": "Wallet address"
-								}
-							]
-						},
-						"description": "Get user profile information by wallet address. Creates a new profile if user doesn't exist."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/users/0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"users",
-										"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"id\": 1,\n    \"wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"username\": \"\",\n    \"email\": \"\",\n    \"role\": \"contributor\",\n    \"is_verified\": false,\n    \"reputation_score\": 0,\n    \"created_at\": \"2025-10-17T00:44:16Z\",\n    \"updated_at\": \"2025-10-17T00:44:16Z\"\n}"
-						}
-					]
-				},
-				{
-					"name": "Get User Reputation",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{base_url}}/api/v1/users/:address/reputation",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								":address",
-								"reputation"
-							],
-							"variable": [
-								{
-									"key": "address",
-									"value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-									"description": "Wallet address"
-								}
-							]
-						},
-						"description": "Get detailed reputation information for a user including total works, successful campaigns, and calculated reputation score."
-					},
-					"response": [
-						{
-							"name": "Success",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{base_url}}/api/v1/users/0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1/reputation",
-									"host": [
-										"{{base_url}}"
-									],
-									"path": [
-										"api",
-										"v1",
-										"users",
-										"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
-										"reputation"
-									]
-								}
-							},
-							"status": "OK",
-							"code": 200,
-							"_postman_previewlanguage": "json",
-							"header": [
-								{
-									"key": "Content-Type",
-									"value": "application/json"
-								}
-							],
-							"cookie": [],
-							"body": "{\n    \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"total_works\": 3,\n    \"successful_campaigns\": 2,\n    \"reputation_score\": 130\n}"
-						}
-					]
-				}
-			],
-			"description": "User profile and reputation endpoints"
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "base_url",
-			"value": "http://localhost:8080",
-			"type": "string"
-		}
-	]
+  "info": {
+    "_postman_id": "tunecent-api-collection",
+    "name": "TuneCent Backend API - PoC Complete",
+    "description": "Complete API collection for TuneCent music rights management platform.\n\n**Base URL:** http://localhost:8080\n\n**Features:**\n- Music Registration with NFT minting\n- Crowdfunding Campaigns with Risk Scoring\n- Royalty Management & Distribution\n- User Profiles & Reputation\n- **PoC Features:**\n  - Dashboard with analytics\n  - Platform stats (Spotify, TikTok, Apple Music) - mocked\n  - Wallet & transaction history\n  - Leaderboard & rankings\n  - Portfolio management\n\n**Total Endpoints:** 37\n**Version:** 1.0.0-poc",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health & System",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Check API health status and verify database connections."
+          },
+          "response": [
+            {
+              "name": "200 - OK",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/health",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "health"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"status\": \"ok\",\n  \"service\": \"TuneCent Backend API\",\n  \"version\": \"1.0.0-poc\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Music",
+      "item": [
+        {
+          "name": "Register Music",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "creator_address",
+                  "value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+                  "type": "text"
+                },
+                {
+                  "key": "title",
+                  "value": "Midnight Dreams",
+                  "type": "text"
+                },
+                {
+                  "key": "artist",
+                  "value": "John Doe",
+                  "type": "text"
+                },
+                {
+                  "key": "genre",
+                  "value": "Electronic",
+                  "type": "text"
+                },
+                {
+                  "key": "description",
+                  "value": "An ambient electronic track",
+                  "type": "text"
+                },
+                {
+                  "key": "duration",
+                  "value": "240",
+                  "type": "text"
+                },
+                {
+                  "key": "audio_file",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/music/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "music",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Music by Token ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/music/:tokenId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "music",
+                ":tokenId"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List All Music",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/music?limit=20&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "music"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "creator",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Music Analytics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/music/:tokenId/analytics",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "music",
+                ":tokenId",
+                "analytics"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Campaigns",
+      "item": [
+        {
+          "name": "Create Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token_id\": 1,\n    \"creator_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n    \"goal_amount\": \"5000000000000000000\",\n    \"royalty_percentage\": 2000,\n    \"duration_days\": 30,\n    \"lockup_days\": 90\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/campaigns",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "campaigns"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Campaign",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/campaigns/:campaignId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "campaigns",
+                ":campaignId"
+              ],
+              "variable": [
+                {
+                  "key": "campaignId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List Campaigns",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/campaigns?status=active&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "campaigns"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0",
+                  "disabled": true
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Contribute to Campaign",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"contributor_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n    \"amount\": \"1000000000000000000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/campaigns/:campaignId/contribute",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "campaigns",
+                ":campaignId",
+                "contribute"
+              ],
+              "variable": [
+                {
+                  "key": "campaignId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Royalties",
+      "item": [
+        {
+          "name": "Get Royalties by Token",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/royalties/token/:tokenId",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "royalties",
+                "token",
+                ":tokenId"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Simulate Royalty Payment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"token_id\": 1,\n    \"platform\": \"TikTok\",\n    \"amount\": \"100000000000000000\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/royalties/simulate",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "royalties",
+                "simulate"
+              ]
+            },
+            "description": "Simulate royalty payment for PoC demo"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get User Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/:address",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                ":address"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get User Reputation",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/users/:address/reputation",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "users",
+                ":address",
+                "reputation"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Dashboard (PoC)",
+      "item": [
+        {
+          "name": "Get Dashboard Overview",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/overview?address={{creator_address}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "overview"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get complete dashboard overview with total music, earnings, listeners, campaigns"
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/dashboard/overview?address=0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "overview"
+                  ],
+                  "query": [
+                    {
+                      "key": "address",
+                      "value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n  \"total_music\": 3,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_listeners\": 45000,\n  \"total_views\": 150000,\n  \"total_plays\": 89000,\n  \"active_campaigns\": 2,\n  \"successful_campaigns\": 1,\n  \"tier\": \"Rising Star\",\n  \"is_verified\": true,\n  \"leaderboard_rank\": 5\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Quick Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/quick-stats?address={{creator_address}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "quick-stats"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get quick stats for dashboard cards (today earnings, weekly growth, new listeners)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trending Pools",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/trending-pools?limit=5",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "trending-pools"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            },
+            "description": "Get trending crowdfunding pools with risk scores and ROI"
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/dashboard/trending-pools?limit=5",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "dashboard",
+                    "trending-pools"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "5"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"pools\": [\n    {\n      \"campaign_id\": 1,\n      \"music_title\": \"Summer Vibes\",\n      \"music_artist\": \"DJ Cool\",\n      \"creator_name\": \"John Doe\",\n      \"creator_verified\": true,\n      \"goal_amount\": \"5000000000000000000\",\n      \"raised_amount\": \"3750000000000000000\",\n      \"funding_percentage\": 75.0,\n      \"risk_score\": 25,\n      \"estimated_roi\": 180.5,\n      \"contributor_count\": 12,\n      \"is_trending\": true,\n      \"status\": \"active\"\n    }\n  ],\n  \"total\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Recent Activities",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/activities?address={{creator_address}}&limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "activities"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get recent activity feed for dashboard"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Music Trends",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/music-trends?address={{creator_address}}&days=30",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "music-trends"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                },
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ]
+            },
+            "description": "Get music trends chart data"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Viral Performance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/viral-performance?address={{creator_address}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "viral-performance"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get viral performance showcase with high viral score songs"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Weekly Progress",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/weekly-progress?address={{creator_address}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "weekly-progress"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get weekly progress indicators (growth percentages)"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Royalty Pulse",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/dashboard/royalty-pulse?address={{creator_address}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "dashboard",
+                "royalty-pulse"
+              ],
+              "query": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get live royalty pulse data (last 24h payments)"
+          },
+          "response": []
+        }
+      ],
+      "description": "Dashboard endpoints with overview stats, trends, and real-time data"
+    },
+    {
+      "name": "Analytics (PoC)",
+      "item": [
+        {
+          "name": "Get Platform Stats (Mocked)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/platform-stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "platform-stats"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get Spotify, TikTok, Apple Music stats (mock data based on tokenID)"
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/analytics/1/platform-stats",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "analytics",
+                    "1",
+                    "platform-stats"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"token_id\": 1,\n  \"title\": \"Summer Vibes\",\n  \"artist\": \"DJ Cool\",\n  \"stats\": {\n    \"spotify\": {\n      \"platform\": \"Spotify\",\n      \"plays\": 25000,\n      \"listeners\": 16250,\n      \"growth\": 520.5\n    },\n    \"tiktok\": {\n      \"platform\": \"TikTok\",\n      \"views\": 75000,\n      \"uses\": 125,\n      \"growth\": 248.2\n    },\n    \"apple_music\": {\n      \"platform\": \"Apple Music\",\n      \"plays\": 15000,\n      \"listeners\": 10500,\n      \"growth\": 70.8\n    }\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Viral Score",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/viral-score",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "viral-score"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get viral score (0-100) with breakdown"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Growth Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/growth?period=week",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "growth"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "week"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get growth percentages by platform"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Listener Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/listeners",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "listeners"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get listener count trends over time"
+          },
+          "response": []
+        },
+        {
+          "name": "Get View Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/views",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "views"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get view counts and play metrics"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Top Songs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/global/top-songs?limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                "global",
+                "top-songs"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "address",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Get global top songs by viral score"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Trending Indicators",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/trending",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "trending"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get trending status and which platforms are trending"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Estimated Reach",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/analytics/:tokenId/reach",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "analytics",
+                ":tokenId",
+                "reach"
+              ],
+              "variable": [
+                {
+                  "key": "tokenId",
+                  "value": "1"
+                }
+              ]
+            },
+            "description": "Get estimated cross-platform reach"
+          },
+          "response": []
+        }
+      ],
+      "description": "Analytics endpoints with platform stats, viral scores, and growth metrics"
+    },
+    {
+      "name": "Wallet (PoC)",
+      "item": [
+        {
+          "name": "Get Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/wallet/:address/transactions?limit=20&offset=0",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "wallet",
+                ":address",
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "type",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get transaction history with pagination"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Balance",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/wallet/:address/balance",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "wallet",
+                ":address",
+                "balance"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get wallet balance in ETH and USD"
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/wallet/0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1/balance",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "wallet",
+                    "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+                    "balance"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n  \"balance_wei\": \"320000000000000000\",\n  \"balance_eth\": 0.32,\n  \"balance_usd\": 800.0,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_invested\": \"1000000000000000000\",\n  \"eth_price_usd\": 2500.0\n}"
+            }
+          ]
+        },
+        {
+          "name": "Search Transactions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/wallet/:address/search?q=royalty&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "wallet",
+                ":address",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "royalty"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Search transactions by description or hash"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Savings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/wallet/:address/savings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "wallet",
+                ":address",
+                "savings"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get total savings from fee discounts"
+          },
+          "response": []
+        }
+      ],
+      "description": "Wallet and transaction management endpoints"
+    },
+    {
+      "name": "Leaderboard (PoC)",
+      "item": [
+        {
+          "name": "Get Top Artists",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaderboard/top-artists?limit=10",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leaderboard",
+                "top-artists"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            },
+            "description": "Get top artists leaderboard by score"
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/leaderboard/top-artists?limit=10",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "leaderboard",
+                    "top-artists"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "10"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"leaderboard\": [\n    {\n      \"rank\": 1,\n      \"wallet_address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n      \"display_name\": \"DJ Cool\",\n      \"tier\": \"Legendary Creator\",\n      \"is_verified\": true,\n      \"total_works\": 15,\n      \"total_earnings\": \"50000000000000000000\",\n      \"total_campaigns\": 8,\n      \"score\": 2500.5\n    },\n    {\n      \"rank\": 2,\n      \"wallet_address\": \"0x8ba1f109551bD432803012645Ac136ddd64DBA72\",\n      \"display_name\": \"Jane Beats\",\n      \"tier\": \"Rising Star\",\n      \"is_verified\": true,\n      \"total_works\": 10,\n      \"total_earnings\": \"30000000000000000000\",\n      \"total_campaigns\": 5,\n      \"score\": 1800.2\n    }\n  ],\n  \"total\": 2\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get User Rank",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaderboard/:address/rank",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leaderboard",
+                ":address",
+                "rank"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get user's leaderboard position and stats"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Leaderboard Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/leaderboard/stats",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "leaderboard",
+                "stats"
+              ]
+            },
+            "description": "Get overall leaderboard statistics"
+          },
+          "response": []
+        }
+      ],
+      "description": "Leaderboard and ranking endpoints"
+    },
+    {
+      "name": "Portfolio (PoC)",
+      "item": [
+        {
+          "name": "Get Portfolio",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/portfolio/:address",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "portfolio",
+                ":address"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get comprehensive portfolio overview"
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{base_url}}/api/v1/portfolio/0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+                  "host": [
+                    "{{base_url}}"
+                  ],
+                  "path": [
+                    "api",
+                    "v1",
+                    "portfolio",
+                    "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1"
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n  \"address\": \"0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1\",\n  \"display_name\": \"DJ Cool\",\n  \"tier\": \"Rising Star\",\n  \"is_verified\": true,\n  \"total_music\": 3,\n  \"total_earnings\": \"2500000000000000000\",\n  \"total_invested\": \"1000000000000000000\",\n  \"active_campaigns\": 2,\n  \"successful_campaigns\": 1,\n  \"portfolio_value_eth\": 15.5,\n  \"portfolio_value_usd\": 38750.0,\n  \"music_stats\": {\n    \"total_plays\": 89000,\n    \"total_views\": 150000,\n    \"total_listeners\": 45000,\n    \"avg_viral_score\": 72.5\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Growth Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/portfolio/:address/growth?period=month",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "portfolio",
+                ":address",
+                "growth"
+              ],
+              "query": [
+                {
+                  "key": "period",
+                  "value": "month"
+                }
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get growth statistics over time"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Performance Metrics",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/portfolio/:address/performance",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "portfolio",
+                ":address",
+                "performance"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get detailed performance metrics per song"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Pools Invested",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/portfolio/:address/pools",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "v1",
+                "portfolio",
+                ":address",
+                "pools"
+              ],
+              "variable": [
+                {
+                  "key": "address",
+                  "value": "{{creator_address}}"
+                }
+              ]
+            },
+            "description": "Get campaigns user has invested in"
+          },
+          "response": []
+        }
+      ],
+      "description": "Portfolio management and performance tracking endpoints"
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "creator_address",
+      "value": "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb1",
+      "type": "string"
+    }
+  ]
 }

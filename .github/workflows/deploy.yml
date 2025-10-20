@@ -1,0 +1,48 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USERNAME }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          cd /home/fabian4819/tunecent-backend
+
+          # Pull latest code (if using git) or we'll use rsync in next step
+          # git pull origin main
+
+          # Build the application
+          export PATH=$PATH:/usr/local/go/bin
+          go build -o tunecent-api cmd/server/main_complete.go
+
+          # Restart the service
+          sudo systemctl restart tunecent-backend
+
+          # Check status
+          sudo systemctl status tunecent-backend --no-pager
+
+          echo "Deployment completed successfully!"
+
+    - name: Sync files to VPS
+      uses: burnett01/rsync-deployments@6.0.0
+      with:
+        switches: -avzr --delete --exclude='.git' --exclude='node_modules' --exclude='.env'
+        path: .
+        remote_path: /home/fabian4819/tunecent-backend
+        remote_host: ${{ secrets.VPS_HOST }}
+        remote_user: ${{ secrets.VPS_USERNAME }}
+        remote_key: ${{ secrets.VPS_SSH_KEY }}

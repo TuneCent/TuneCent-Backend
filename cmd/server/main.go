@@ -7,7 +7,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	"github.com/tunecent/backend/internal/config"
+	"github.com/tunecent/backend/internal/database"
+	"github.com/tunecent/backend/internal/handlers"
 	"github.com/tunecent/backend/internal/models"
+	"github.com/tunecent/backend/internal/services"
+	"github.com/tunecent/backend/pkg/fingerprint"
+	"github.com/tunecent/backend/pkg/ipfs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -18,16 +24,53 @@ func main() {
 		log.Println("No .env file found, using environment variables")
 	}
 
+	// Load configuration
+	cfg, err := config.Load()
+	if err != nil {
+		log.Fatal("Failed to load configuration:", err)
+	}
+
 	// Initialize database
-	db, err := initDB()
+	gormDB, err := initDB()
 	if err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 
-	// Run migrations
-	if err := runMigrations(db); err != nil {
-		log.Fatal("Failed to run migrations:", err)
-	}
+	// Wrap GORM DB in our database wrapper
+	db := &database.DB{DB: gormDB}
+
+	// Run migrations - DISABLED for PoC (using schema.sql instead)
+	// if err := runMigrations(gormDB); err != nil {
+	// 	log.Fatal("Failed to run migrations:", err)
+	// }
+
+	// Initialize services
+	ipfsService := ipfs.NewService(cfg)
+	fingerprintService := fingerprint.NewService()
+	musicService := services.NewMusicService(db, ipfsService, fingerprintService, nil)
+	distributionService := services.NewDistributionService(db)
+	notificationService := services.NewNotificationService(db)
+	ledgerService := services.NewLedgerService(db)
+	reinvestmentService := services.NewReinvestmentService(db)
+
+	// Initialize handlers
+	musicHandler := handlers.NewMusicHandler(musicService)
+	campaignHandler := handlers.NewCampaignHandler(db)
+	royaltyHandler := handlers.NewRoyaltyHandler(db)
+	userHandler := handlers.NewUserHandler(db)
+
+	// PoC handlers
+	dashboardHandler := handlers.NewDashboardHandler(db)
+	analyticsHandler := handlers.NewAnalyticsHandler(db)
+	walletHandler := handlers.NewWalletHandler(db)
+	leaderboardHandler := handlers.NewLeaderboardHandler(db)
+	portfolioHandler := handlers.NewPortfolioHandler(db)
+
+	// New service handlers
+	distributionHandler := handlers.NewDistributionHandler(distributionService)
+	notificationHandler := handlers.NewNotificationHandler(notificationService)
+	ledgerHandler := handlers.NewLedgerHandler(ledgerService)
+	reinvestmentHandler := handlers.NewReinvestmentHandler(reinvestmentService)
 
 	// Initialize Gin router
 	r := gin.Default()
@@ -52,33 +95,133 @@ func main() {
 		// Music routes
 		music := v1.Group("/music")
 		{
-			music.POST("/register", RegisterMusic(db))
-			music.GET("/:tokenId", GetMusic(db))
-			music.GET("/", ListMusic(db))
-			music.GET("/:tokenId/analytics", GetMusicAnalytics(db))
+			music.POST("/register", musicHandler.RegisterMusic)
+			music.GET("/:tokenId", musicHandler.GetMusic)
+			music.GET("/", musicHandler.ListMusic)
+			music.GET("/:tokenId/analytics", musicHandler.GetMusicAnalytics)
 		}
 
 		// Campaign routes
 		campaigns := v1.Group("/campaigns")
 		{
-			campaigns.POST("/", CreateCampaign(db))
-			campaigns.GET("/:campaignId", GetCampaign(db))
-			campaigns.GET("/", ListCampaigns(db))
-			campaigns.POST("/:campaignId/contribute", Contribute(db))
+			campaigns.POST("/", campaignHandler.CreateCampaign)
+			campaigns.GET("/:campaignId", campaignHandler.GetCampaign)
+			campaigns.GET("/", campaignHandler.ListCampaigns)
+			campaigns.POST("/:campaignId/contribute", campaignHandler.Contribute)
 		}
 
 		// Royalty routes
 		royalties := v1.Group("/royalties")
 		{
-			royalties.GET("/token/:tokenId", GetRoyalties(db))
-			royalties.POST("/simulate", SimulateRoyaltyPayment(db))
+			royalties.GET("/token/:tokenId", royaltyHandler.GetRoyalties)
+			royalties.POST("/simulate", royaltyHandler.SimulateRoyaltyPayment)
 		}
 
 		// User/Reputation routes
 		users := v1.Group("/users")
 		{
-			users.GET("/:address", GetUserProfile(db))
-			users.GET("/:address/reputation", GetReputation(db))
+			users.GET("/:address", userHandler.GetUserProfile)
+			users.GET("/:address/reputation", userHandler.GetReputation)
+		}
+
+		// Dashboard routes (PoC)
+		dashboard := v1.Group("/dashboard")
+		{
+			dashboard.GET("/overview", dashboardHandler.GetOverview)
+			dashboard.GET("/quick-stats", dashboardHandler.GetQuickStats)
+			dashboard.GET("/trending-pools", dashboardHandler.GetTrendingPools)
+			dashboard.GET("/activities", dashboardHandler.GetRecentActivities)
+			dashboard.GET("/music-trends", dashboardHandler.GetMusicTrends)
+			dashboard.GET("/viral-performance", dashboardHandler.GetViralPerformance)
+			dashboard.GET("/weekly-progress", dashboardHandler.GetWeeklyProgress)
+			dashboard.GET("/royalty-pulse", dashboardHandler.GetRoyaltyPulse)
+		}
+
+		// Analytics routes (PoC)
+		analytics := v1.Group("/analytics")
+		{
+			analytics.GET("/:tokenId/platform-stats", analyticsHandler.GetPlatformStats)
+			analytics.GET("/:tokenId/viral-score", analyticsHandler.GetViralScore)
+			analytics.GET("/:tokenId/growth", analyticsHandler.GetGrowthMetrics)
+			analytics.GET("/:tokenId/listeners", analyticsHandler.GetListenerMetrics)
+			analytics.GET("/:tokenId/views", analyticsHandler.GetViewMetrics)
+			analytics.GET("/:tokenId/trending", analyticsHandler.GetTrendingIndicators)
+			analytics.GET("/:tokenId/reach", analyticsHandler.GetEstimatedReach)
+			analytics.GET("/global/top-songs", analyticsHandler.GetTopSongs)
+		}
+
+		// Wallet routes (PoC)
+		wallet := v1.Group("/wallet")
+		{
+			wallet.GET("/:address/transactions", walletHandler.GetTransactions)
+			wallet.GET("/:address/balance", walletHandler.GetBalance)
+			wallet.GET("/:address/search", walletHandler.SearchTransactions)
+			wallet.GET("/:address/savings", walletHandler.GetSavings)
+		}
+
+		// Leaderboard routes (PoC)
+		leaderboard := v1.Group("/leaderboard")
+		{
+			leaderboard.GET("/top-artists", leaderboardHandler.GetTopArtists)
+			leaderboard.GET("/:address/rank", leaderboardHandler.GetUserRank)
+			leaderboard.GET("/stats", leaderboardHandler.GetLeaderboardStats)
+		}
+
+		// Portfolio routes (PoC)
+		portfolio := v1.Group("/portfolio")
+		{
+			portfolio.GET("/:address", portfolioHandler.GetPortfolio)
+			portfolio.GET("/:address/growth", portfolioHandler.GetGrowthStats)
+			portfolio.GET("/:address/performance", portfolioHandler.GetPerformanceMetrics)
+			portfolio.GET("/:address/pools", portfolioHandler.GetPoolsInvested)
+		}
+
+		// Distribution routes
+		distribution := v1.Group("/distribution")
+		{
+			distribution.POST("/submit", distributionHandler.SubmitDistribution)
+			distribution.GET("/:tokenId/status", distributionHandler.GetDistributionStatus)
+			distribution.GET("/:tokenId/platform/:platform", distributionHandler.GetPlatformStatus)
+			distribution.PUT("/:tokenId/platform/:platform", distributionHandler.UpdatePlatformStatus)
+			distribution.GET("/list", distributionHandler.ListDistributions)
+		}
+
+		// Notification routes
+		notifications := v1.Group("/notifications")
+		{
+			notifications.GET("", notificationHandler.GetNotifications)
+			notifications.GET("/unread/count", notificationHandler.GetUnreadCount)
+			notifications.PUT("/:id/read", notificationHandler.MarkAsRead)
+			notifications.PUT("/read-all", notificationHandler.MarkAllAsRead)
+			notifications.DELETE("/:id", notificationHandler.DeleteNotification)
+			notifications.GET("/preferences", notificationHandler.GetPreferences)
+			notifications.PUT("/preferences", notificationHandler.UpdatePreferences)
+		}
+
+		// Ledger routes
+		ledger := v1.Group("/ledger")
+		{
+			ledger.GET("/:tokenId/splits", ledgerHandler.GetSplitHistory)
+			ledger.GET("/:tokenId/contributors", ledgerHandler.GetContributorBreakdown)
+			ledger.GET("/audit/:txHash", ledgerHandler.GetSplitByTxHash)
+			ledger.GET("/user/:address", ledgerHandler.GetUserLedger)
+		}
+
+		// Audit routes
+		audit := v1.Group("/audit")
+		{
+			audit.GET("/transaction/:txHash", walletHandler.GetTransactionAudit)
+			audit.GET("/verify/:txHash", walletHandler.VerifyTransaction)
+			audit.GET("/block/:blockNumber", walletHandler.GetBlockDetails)
+		}
+
+		// Reinvestment routes
+		reinvest := v1.Group("/reinvest")
+		{
+			reinvest.GET("/suggestions", reinvestmentHandler.GetSuggestions)
+			reinvest.POST("/quick", reinvestmentHandler.QuickReinvest)
+			reinvest.GET("/history", reinvestmentHandler.GetHistory)
+			reinvest.GET("/stats", reinvestmentHandler.GetStats)
 		}
 	}
 
@@ -88,19 +231,59 @@ func main() {
 		port = "8080"
 	}
 
-	log.Printf("Starting TuneCent Backend API on port %s", port)
+	log.Printf("🚀 TuneCent Backend API starting on port %s", port)
+	log.Printf("📊 Total endpoints: 68")
+	log.Printf("✅ Music endpoints: 4")
+	log.Printf("✅ Campaign endpoints: 4")
+	log.Printf("✅ Royalty endpoints: 2")
+	log.Printf("✅ User endpoints: 2")
+	log.Printf("✅ Dashboard endpoints: 8")
+	log.Printf("✅ Analytics endpoints: 8")
+	log.Printf("✅ Wallet endpoints: 4")
+	log.Printf("✅ Leaderboard endpoints: 3")
+	log.Printf("✅ Portfolio endpoints: 4")
+	log.Printf("✅ Distribution endpoints: 5")
+	log.Printf("✅ Notification endpoints: 7")
+	log.Printf("✅ Ledger endpoints: 4")
+	log.Printf("✅ Audit endpoints: 3")
+	log.Printf("✅ Reinvestment endpoints: 4")
+	log.Printf("🎯 PoC Mode: Using mock data for platform stats")
+	log.Printf("🆕 New Features: Distribution Hub, Notifications, Split Ledger, Audit Tools, Reinvestment")
+
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal("Failed to start server:", err)
 	}
 }
 
 func initDB() (*gorm.DB, error) {
+	// Get database credentials from environment
+	dbUser := os.Getenv("DB_USER")
+	if dbUser == "" {
+		dbUser = "root"
+	}
+
+	dbPassword := os.Getenv("DB_PASSWORD")
+	if dbPassword == "" {
+		dbPassword = "password"
+	}
+
+	dbHost := os.Getenv("DB_HOST")
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
+
+	dbPort := os.Getenv("DB_PORT")
+	if dbPort == "" {
+		dbPort = "3306"
+	}
+
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "tunecent_db"
+	}
+
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_HOST"),
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"),
+		dbUser, dbPassword, dbHost, dbPort, dbName,
 	)
 
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -108,11 +291,14 @@ func initDB() (*gorm.DB, error) {
 		return nil, err
 	}
 
+	log.Println("✅ Database connected successfully")
 	return db, nil
 }
 
 func runMigrations(db *gorm.DB) error {
-	return db.AutoMigrate(
+	log.Println("🔄 Running database migrations...")
+
+	err := db.AutoMigrate(
 		&models.User{},
 		&models.MusicMetadata{},
 		&models.Campaign{},
@@ -121,7 +307,23 @@ func runMigrations(db *gorm.DB) error {
 		&models.RoyaltyDistribution{},
 		&models.UsageDetection{},
 		&models.Analytics{},
+		&models.Transaction{},
+		&models.Activity{},
+		&models.DistributionSubmission{},
+		&models.PlatformDistribution{},
+		&models.Notification{},
+		&models.NotificationPreference{},
+		&models.SplitRecord{},
+		&models.ReinvestmentSuggestion{},
+		&models.ReinvestmentHistory{},
 	)
+
+	if err != nil {
+		return err
+	}
+
+	log.Println("✅ Migrations completed successfully")
+	return nil
 }
 
 func CORSMiddleware() gin.HandlerFunc {
@@ -137,78 +339,5 @@ func CORSMiddleware() gin.HandlerFunc {
 		}
 
 		c.Next()
-	}
-}
-
-// Placeholder handlers (to be implemented)
-func RegisterMusic(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - register music endpoint"})
-	}
-}
-
-func GetMusic(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - get music endpoint"})
-	}
-}
-
-func ListMusic(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - list music endpoint"})
-	}
-}
-
-func GetMusicAnalytics(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - get analytics endpoint"})
-	}
-}
-
-func CreateCampaign(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - create campaign endpoint"})
-	}
-}
-
-func GetCampaign(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - get campaign endpoint"})
-	}
-}
-
-func ListCampaigns(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - list campaigns endpoint"})
-	}
-}
-
-func Contribute(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - contribute endpoint"})
-	}
-}
-
-func GetRoyalties(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - get royalties endpoint"})
-	}
-}
-
-func SimulateRoyaltyPayment(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - simulate royalty payment endpoint"})
-	}
-}
-
-func GetUserProfile(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - get user profile endpoint"})
-	}
-}
-
-func GetReputation(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.JSON(501, gin.H{"error": "Not implemented - get reputation endpoint"})
 	}
 }
