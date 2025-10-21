@@ -1,0 +1,218 @@
+basePath: /api/v1
+host: localhost:8080
+info:
+  contact:
+    email: support@tunecent.com
+    name: TuneCent API Support
+    url: https://github.com/tunecent
+  description: Complete TuneCent Backend API with 68 endpoints for music NFT, campaigns,
+    royalties, analytics, and more
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: TuneCent Backend API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: Returns the health status of the API service
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Health status
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Health check endpoint
+      tags:
+      - Health
+  /music:
+    get:
+      description: Get paginated list of music NFTs with optional filtering
+      parameters:
+      - default: 20
+        description: Limit (max 100)
+        in: query
+        name: limit
+        type: integer
+      - default: 0
+        description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Filter by creator address
+        in: query
+        name: creator
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of music
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: List all music NFTs
+      tags:
+      - Music
+  /music/{tokenId}:
+    get:
+      description: Retrieve music NFT metadata by token ID
+      parameters:
+      - description: Music Token ID
+        in: path
+        name: tokenId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Music metadata
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid token ID
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Music not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get music by token ID
+      tags:
+      - Music
+  /music/{tokenId}/analytics:
+    get:
+      description: Retrieve analytics data for a specific music NFT
+      parameters:
+      - description: Music Token ID
+        in: path
+        name: tokenId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Music analytics
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid token ID
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Analytics not found
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get music analytics
+      tags:
+      - Music
+  /music/register:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload and register a new music NFT with metadata and audio file
+      parameters:
+      - description: Creator's wallet address
+        in: formData
+        name: creator_address
+        required: true
+        type: string
+      - description: Music title
+        in: formData
+        name: title
+        required: true
+        type: string
+      - description: Artist name
+        in: formData
+        name: artist
+        required: true
+        type: string
+      - description: Music genre
+        in: formData
+        name: genre
+        type: string
+      - description: Music description
+        in: formData
+        name: description
+        type: string
+      - description: Duration in seconds
+        in: formData
+        name: duration
+        type: integer
+      - description: Audio file
+        in: formData
+        name: audio_file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Music registered successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Register new music NFT
+      tags:
+      - Music
+schemes:
+- http
+- https
+swagger: "2.0"
+tags:
+- description: Health check endpoints
+  name: Health
+- description: Music NFT registration and management endpoints
+  name: Music
+- description: Crowdfunding campaign endpoints
+  name: Campaigns
+- description: Royalty payment and simulation endpoints
+  name: Royalties
+- description: User profile and reputation endpoints
+  name: Users
+- description: Dashboard overview and statistics endpoints
+  name: Dashboard
+- description: Music analytics and metrics endpoints
+  name: Analytics
+- description: Wallet transaction and balance endpoints
+  name: Wallet
+- description: Leaderboard and ranking endpoints
+  name: Leaderboard
+- description: Portfolio and investment tracking endpoints
+  name: Portfolio
+- description: Music distribution management endpoints
+  name: Distribution
+- description: Notification management endpoints
+  name: Notifications
+- description: Revenue split ledger endpoints
+  name: Ledger
+- description: Blockchain audit and verification endpoints
+  name: Audit
+- description: Reinvestment suggestions and tracking endpoints
+  name: Reinvestment

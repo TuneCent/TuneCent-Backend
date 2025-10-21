@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/tunecent/backend/internal/config"
 	"github.com/tunecent/backend/internal/database"
 	"github.com/tunecent/backend/internal/handlers"
@@ -16,7 +18,70 @@ import (
 	"github.com/tunecent/backend/pkg/ipfs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+
+	_ "github.com/tunecent/backend/docs"
 )
+
+// @title TuneCent Backend API
+// @version 1.0
+// @description Complete TuneCent Backend API with 68 endpoints for music NFT, campaigns, royalties, analytics, and more
+// @termsOfService http://swagger.io/terms/
+
+// @contact.name TuneCent API Support
+// @contact.url https://github.com/tunecent
+// @contact.email support@tunecent.com
+
+// @license.name MIT
+// @license.url https://opensource.org/licenses/MIT
+
+// @host localhost:8080
+// @BasePath /api/v1
+// @schemes http https
+
+// @tag.name Health
+// @tag.description Health check endpoints
+
+// @tag.name Music
+// @tag.description Music NFT registration and management endpoints
+
+// @tag.name Campaigns
+// @tag.description Crowdfunding campaign endpoints
+
+// @tag.name Royalties
+// @tag.description Royalty payment and simulation endpoints
+
+// @tag.name Users
+// @tag.description User profile and reputation endpoints
+
+// @tag.name Dashboard
+// @tag.description Dashboard overview and statistics endpoints
+
+// @tag.name Analytics
+// @tag.description Music analytics and metrics endpoints
+
+// @tag.name Wallet
+// @tag.description Wallet transaction and balance endpoints
+
+// @tag.name Leaderboard
+// @tag.description Leaderboard and ranking endpoints
+
+// @tag.name Portfolio
+// @tag.description Portfolio and investment tracking endpoints
+
+// @tag.name Distribution
+// @tag.description Music distribution management endpoints
+
+// @tag.name Notifications
+// @tag.description Notification management endpoints
+
+// @tag.name Ledger
+// @tag.description Revenue split ledger endpoints
+
+// @tag.name Audit
+// @tag.description Blockchain audit and verification endpoints
+
+// @tag.name Reinvestment
+// @tag.description Reinvestment suggestions and tracking endpoints
 
 func main() {
 	// Load environment variables
@@ -80,14 +145,11 @@ func main() {
 	r.Use(gin.Recovery())
 	r.Use(CORSMiddleware())
 
+	// Swagger documentation
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	// Health check
-	r.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status":  "ok",
-			"service": "TuneCent Backend API",
-			"version": "1.0.0-poc",
-		})
-	})
+	r.GET("/health", HealthCheck)
 
 	// API v1 routes
 	v1 := r.Group("/api/v1")
@@ -324,6 +386,21 @@ func runMigrations(db *gorm.DB) error {
 
 	log.Println("✅ Migrations completed successfully")
 	return nil
+}
+
+// HealthCheck godoc
+// @Summary Health check endpoint
+// @Description Returns the health status of the API service
+// @Tags Health
+// @Produce json
+// @Success 200 {object} map[string]interface{} "Health status"
+// @Router /health [get]
+func HealthCheck(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"status":  "ok",
+		"service": "TuneCent Backend API",
+		"version": "1.0.0-poc",
+	})
 }
 
 func CORSMiddleware() gin.HandlerFunc {

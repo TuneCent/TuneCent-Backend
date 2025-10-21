@@ -20,6 +20,22 @@ func NewMusicHandler(musicService *services.MusicService) *MusicHandler {
 }
 
 // RegisterMusic handles POST /api/v1/music/register
+// @Summary Register new music NFT
+// @Description Upload and register a new music NFT with metadata and audio file
+// @Tags Music
+// @Accept multipart/form-data
+// @Produce json
+// @Param creator_address formData string true "Creator's wallet address"
+// @Param title formData string true "Music title"
+// @Param artist formData string true "Artist name"
+// @Param genre formData string false "Music genre"
+// @Param description formData string false "Music description"
+// @Param duration formData integer false "Duration in seconds"
+// @Param audio_file formData file true "Audio file"
+// @Success 201 {object} map[string]interface{} "Music registered successfully"
+// @Failure 400 {object} map[string]interface{} "Bad request"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /music/register [post]
 func (h *MusicHandler) RegisterMusic(c *gin.Context) {
 	// Parse multipart form
 	if err := c.Request.ParseMultipartForm(50 << 20); err != nil { // 50 MB limit
@@ -78,6 +94,15 @@ func (h *MusicHandler) RegisterMusic(c *gin.Context) {
 }
 
 // GetMusic handles GET /api/v1/music/:tokenId
+// @Summary Get music by token ID
+// @Description Retrieve music NFT metadata by token ID
+// @Tags Music
+// @Produce json
+// @Param tokenId path integer true "Music Token ID"
+// @Success 200 {object} map[string]interface{} "Music metadata"
+// @Failure 400 {object} map[string]interface{} "Invalid token ID"
+// @Failure 404 {object} map[string]interface{} "Music not found"
+// @Router /music/{tokenId} [get]
 func (h *MusicHandler) GetMusic(c *gin.Context) {
 	tokenIDStr := c.Param("tokenId")
 	tokenID, err := strconv.ParseUint(tokenIDStr, 10, 64)
@@ -96,6 +121,16 @@ func (h *MusicHandler) GetMusic(c *gin.Context) {
 }
 
 // ListMusic handles GET /api/v1/music
+// @Summary List all music NFTs
+// @Description Get paginated list of music NFTs with optional filtering
+// @Tags Music
+// @Produce json
+// @Param limit query integer false "Limit (max 100)" default(20)
+// @Param offset query integer false "Offset" default(0)
+// @Param creator query string false "Filter by creator address"
+// @Success 200 {object} map[string]interface{} "List of music"
+// @Failure 500 {object} map[string]interface{} "Internal server error"
+// @Router /music [get]
 func (h *MusicHandler) ListMusic(c *gin.Context) {
 	// Parse query parameters
 	limitStr := c.DefaultQuery("limit", "20")
@@ -124,6 +159,15 @@ func (h *MusicHandler) ListMusic(c *gin.Context) {
 }
 
 // GetMusicAnalytics handles GET /api/v1/music/:tokenId/analytics
+// @Summary Get music analytics
+// @Description Retrieve analytics data for a specific music NFT
+// @Tags Music
+// @Produce json
+// @Param tokenId path integer true "Music Token ID"
+// @Success 200 {object} map[string]interface{} "Music analytics"
+// @Failure 400 {object} map[string]interface{} "Invalid token ID"
+// @Failure 404 {object} map[string]interface{} "Analytics not found"
+// @Router /music/{tokenId}/analytics [get]
 func (h *MusicHandler) GetMusicAnalytics(c *gin.Context) {
 	tokenIDStr := c.Param("tokenId")
 	tokenID, err := strconv.ParseUint(tokenIDStr, 10, 64)
