@@ -22,7 +22,7 @@ func NewMusicHandler(musicService *services.MusicService) *MusicHandler {
 // RegisterMusic handles POST /api/v1/music/register
 func (h *MusicHandler) RegisterMusic(c *gin.Context) {
 	// Parse multipart form
-	if err := c.Request.ParseMultipartForm(10 << 20); err != nil { // 10 MB limit
+	if err := c.Request.ParseMultipartForm(50 << 20); err != nil { // 50 MB limit
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Failed to parse form"})
 		return
 	}

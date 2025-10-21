@@ -38,18 +38,12 @@ func (h *LeaderboardHandler) GetTopArtists(c *gin.Context) {
 
 	var leaderboard []LeaderboardEntry
 
-	// Use the vw_leaderboard view created in migration
-	// Or calculate on the fly for more accuracy
+	// Calculate leaderboard on the fly
 	h.db.Table("users u").
 		Select(`
-			ROW_NUMBER() OVER (ORDER BY
-				(COUNT(DISTINCT m.token_id) * 100 +
-				 COALESCE(SUM(CAST(rd.amount AS DECIMAL(30,0))) / 1e18, 0) * 10 +
-				 COUNT(DISTINCT c.campaign_id) * 50) DESC
-			) as rank,
 			u.wallet_address,
-			u.display_name,
-			u.tier,
+			u.username as display_name,
+			'starter' as tier,
 			u.is_verified,
 			COUNT(DISTINCT m.token_id) as total_works,
 			COALESCE(SUM(CAST(rd.amount AS DECIMAL(30,0))), 0) as total_earnings,
@@ -59,13 +53,18 @@ func (h *LeaderboardHandler) GetTopArtists(c *gin.Context) {
 			 COUNT(DISTINCT c.campaign_id) * 50) as score
 		`).
 		Joins("LEFT JOIN music_metadata m ON u.wallet_address = m.creator_address").
-		Joins("LEFT JOIN royalty_distributions rd ON m.token_id = rd.token_id").
+		Joins("LEFT JOIN royalty_distributions rd ON m.token_id = rd.token_id AND rd.beneficiary = u.wallet_address").
 		Joins("LEFT JOIN campaigns c ON u.wallet_address = c.creator_address").
 		Where("u.role IN (?)", []string{"creator", "both"}).
 		Group("u.wallet_address").
 		Order("score DESC").
 		Limit(limit).
 		Scan(&leaderboard)
+
+	// Add rank numbers after fetching
+	for i := range leaderboard {
+		leaderboard[i].Rank = i + 1
+	}
 
 	// If no results, return empty array
 	if leaderboard == nil {
